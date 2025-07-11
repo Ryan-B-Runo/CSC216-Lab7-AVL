@@ -1,4 +1,3 @@
-import java.util.Iterator;
 
 public class AVLTree{
 
@@ -8,6 +7,7 @@ public class AVLTree{
     public int size(){
         return nodeCount;
     }
+
     public boolean isEmpty(){
         return nodeCount == 0;
     }
