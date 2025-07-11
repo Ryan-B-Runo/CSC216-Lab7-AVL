@@ -36,8 +36,9 @@ public class AVLTree{
         }else{
             n.setRight(insert(n.getRight(), value));
         }
-        //balance here#######################################################################
-        return n;
+
+        update(n);
+        return balance(n);
     }
 
     public boolean insert(int value){
@@ -47,6 +48,65 @@ public class AVLTree{
             return true;
         }
         return false;
+    }
+
+    private void update(Node<Integer> n){
+        int leftNodeHeight = (n.getLeft() == null) ? -1 : n.getLeft().getHeight();
+        int rightNodeHeight = (n.getRight() == null) ? -1 : n.getRight().getHeight();
+
+        n.setHeight(1 + Math.max(leftNodeHeight, rightNodeHeight));
+        n.setBalanceFactor(rightNodeHeight - leftNodeHeight);
+    }
+
+    private Node<Integer> leftRotate(Node<Integer> n){
+        Node<Integer> newParent = n.getRight();
+        n.setRight(newParent.getLeft());
+        newParent.setLeft(n);
+        update(n);
+        update(newParent);
+        return newParent;
+    }
+
+    private Node<Integer> rightRotate(Node<Integer> n){
+        Node<Integer> newParent = n.getLeft();
+        n.setLeft(newParent.getRight());
+        newParent.setRight(n);
+        update(n);
+        update(newParent);
+        return newParent;
+    }
+
+    private Node<Integer> leftLeft(Node<Integer> n){
+        return rightRotate(n);
+    }
+    private Node<Integer> rightRight(Node<Integer> n){
+        return leftRotate(n);
+    }
+    private Node<Integer> rightLeft(Node<Integer> n){
+        n.setRight(rightRotate(n.getRight()));
+        return rightRight(n);
+    }
+    private Node<Integer> leftRight(Node<Integer> n){
+        n.setLeft(leftRotate(n.getLeft()));
+        return leftLeft(n);
+    }
+
+    private Node<Integer> balance(Node<Integer> n){
+        if(n.getBalanceFactor() == -2){
+
+            if(n.getLeft().getBalanceFactor() <= 0){    //left-left case
+                return leftLeft(n);
+            }else{                                      //left-right case
+                return leftRight(n);
+            }
+        }else if(n.getBalanceFactor() == 2){
+            if(n.getRight().getBalanceFactor() >= 0){   //right-right case
+                return rightRight(n);
+            }else{                                      //left-right case
+                return rightLeft(n);
+            }
+        }
+        return n;
     }
 
 }
@@ -92,4 +152,11 @@ class Node<T>{
         this.right = right;
     }
 
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setBalanceFactor(int balanceFactor) {
+        this.balanceFactor = balanceFactor;
+    }
 }
