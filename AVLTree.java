@@ -91,6 +91,20 @@ public class AVLTree{
         return leftLeft(n);
     }
 
+    private int findMax(Node<Integer> n){
+        while(n.getRight() != null){
+            n = n.getRight();
+        }
+        return n.getValue();
+    }
+
+    private int findMin(Node<Integer> n){
+        while(n.getLeft() != null){
+            n = n.getLeft();
+        }
+        return n.getValue();
+    }
+
     private Node<Integer> balance(Node<Integer> n){
         if(n.getBalanceFactor() == -2){
 
@@ -107,6 +121,41 @@ public class AVLTree{
             }
         }
         return n;
+    }
+
+    private Node<Integer> delete(Node<Integer> n, int value){
+        if(value < root.getValue()){
+            n.setLeft(delete(n.getLeft(), value));
+        }else if (value > root.getValue()){
+            n.setRight(delete(n.getRight(), value));
+        }else{
+            if(n.getLeft() == null){
+                return n.getRight();
+            }else if(n.getRight() == null){
+                return n.getLeft();
+            }else{
+                if(n.getLeft().getHeight() > n.getRight().getHeight()){
+                    int successor = findMax(n.getLeft());
+                    n.setValue(successor);
+                    n.setLeft(delete(n.getLeft(), successor));
+                }else{
+                    int successor = findMin(n.getRight());
+                    n.setValue(successor);
+                    n.setRight(delete(n.getRight(), successor));
+                }
+            }
+        }
+        update(n);
+        return balance(n);
+    }
+
+    public boolean delete(int value){
+        if(contains(root, value)){
+            root = delete(root, value);
+            nodeCount--;
+            return true;
+        }
+        return false;
     }
 
 }
