@@ -123,7 +123,7 @@ public class AVLTree{
         return n;
     }
 
-    private Node<Integer> delete(Node<Integer> n, int value){
+    private Node<Integer> delete(Node<Integer> n, int value){//not working
         if(n == null) return null;
         if(value < root.getValue()){
             n.setLeft(delete(n.getLeft(), value));
