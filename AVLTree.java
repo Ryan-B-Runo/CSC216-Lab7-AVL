@@ -30,7 +30,7 @@ public class AVLTree{
 
     private Node<Integer> insert(Node<Integer> n, int value){
         if (n == null) return new Node(value);
-        //may have to change the signs#######################################################
+
         if(value < n.getValue()){
             n.setLeft(insert(n.getLeft(), value));
         }else{
@@ -124,6 +124,7 @@ public class AVLTree{
     }
 
     private Node<Integer> delete(Node<Integer> n, int value){
+        if(n == null) return null;
         if(value < root.getValue()){
             n.setLeft(delete(n.getLeft(), value));
         }else if (value > root.getValue()){
@@ -156,6 +157,19 @@ public class AVLTree{
             return true;
         }
         return false;
+    }
+
+    private String serialize(Node<Integer> n){
+        if(n == null){
+            return "-,";
+        }
+        String left = serialize(n.getLeft());
+        String right = serialize(n.getRight());
+        return n.getValue() + "," + left + right;
+    }
+
+    public String serialize(){
+        return serialize(root);
     }
 
 }
